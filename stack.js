@@ -6,6 +6,7 @@ class Node {
 }
 // min 값을 스택 노드에 집어넣으면 스택이 변해도 min value를 동적으로 할당 가능
 // 혹은 stack을 하나 만들어서 최소값을 거기에 집어넣어서 노드와 매칭시킴
+// 스택 안쪽에 이런식으로 넣어버리면 최소값 변동 시 O(n) 시간복잡도를 가지게 됨
 class Stack {
   constructor() {
     this.top = null;
@@ -156,49 +157,49 @@ class SetOfStacks {
 // }
 
 // #3 하노이 탑
-// const fRod = new Stack();
-// const sRod = new Stack();
-// const tRod = new Stack();
+const fRod = new Stack();
+const sRod = new Stack();
+const tRod = new Stack();
 
-// let cnt = 5;
-// while(cnt > 0){
-//   fRod.push(new Node(cnt));
-//   cnt -= 1
-// }
-// function hanoi(initRod, target, bridgeRod, diskCount){
-//   const cnt = diskCount;
-//   if(cnt > 0){
-//     hanoi(initRod, bridgeRod, target, cnt-1);
-//     target.push(new Node(initRod.pop()));
-//     hanoi(bridgeRod, target, initRod, cnt-1);
-//   }
-// }
+let cnt = 5;
+while(cnt > 0){
+  fRod.push(new Node(cnt));
+  cnt -= 1
+}
+function hanoi(initRod, target, bridgeRod, diskCount){
+  const cnt = diskCount;
+  if(cnt > 0){
+    hanoi(initRod, bridgeRod, target, cnt-1);
+    target.push(new Node(initRod.pop()));
+    hanoi(bridgeRod, target, initRod, cnt-1);
+  }
+}
 
-// hanoi(fRod, tRod, sRod, 5);
-// console.log(fRod);
-// console.log(tRod);
+hanoi(fRod, tRod, sRod, 5);
+console.log(fRod);
+console.log(tRod);
 
 // #4 두개의 스택을 사용하여 큐를 구현하라
-// class QueueByTwoStack {
-//   constructor() {
-//     this.normalStack = new Stack();
-//     this.reverseStack = new Stack();
-//   }
-//   push(Node) {
-//     this.normalStack.push(Node);
-//   }
-//   makeItQueue() {
-//     const normalS = this.normalStack;
-//     let popVal = this.normalStack.pop();
-//     while (popVal !== null) {
-//       this.reverseStack.push(new Node(popVal));
-//       popVal = this.normalStack.pop();
-//     }
-//   }
-//   popQueue() {
-//     return this.reverseStack.pop();
-//   }
-// }
+class QueueByTwoStack {
+  constructor() {
+    this.normalStack = new Stack();
+    this.reverseStack = new Stack();
+  }
+  push(Node) {
+    this.normalStack.push(Node);
+  }
+  makeItQueue() {
+    const normalS = this.normalStack;
+    let popVal = this.normalStack.pop();
+    while (popVal !== null) {
+      this.reverseStack.push(new Node(popVal));
+      popVal = this.normalStack.pop();
+    }
+  }
+  popQueue() {
+    return this.reverseStack.pop();
+  }
+}
 
 // const myQueue = new QueueByTwoStack();
 // let cnt = 0;
@@ -213,6 +214,8 @@ class SetOfStacks {
 // console.log(myQueue.popQueue());
 // console.log(myQueue.popQueue());
 // console.log(myQueue.popQueue());
+
+
 
 // #5 고양이 개 보호소
 class CatAndDogQueue {
