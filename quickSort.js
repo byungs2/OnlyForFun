@@ -32,3 +32,7 @@ console.log(list);
 for(let i = 0; i < list.length; i++){
     console.log(list[i]);
 }
+const a = "asbcd"
+for(let i in a){
+    console.log(a[i]);
+}

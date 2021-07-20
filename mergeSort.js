@@ -93,3 +93,5 @@ function SortingAndMerging(fList, sList){
     }
     return newList;
 }
+
+console.log(mergeSort(["1","11", "112", "10"]));
