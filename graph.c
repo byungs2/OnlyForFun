@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//TODO: Dijkstra, Segment & index tree, KMP, Alpha Beta pruning 
+//TODO: Segment & index tree, KMP, Alpha Beta pruning 
 //IMPLEMENTED: Queue, Linked_List, Stack, Quick sort, Merge sort, Priority Queue with Max heap, Graph with list, BFS, DFS
-
+//프림 알고리즘 - 시작 노드에서 출발하여 각 방문 노드의 간선들을 Prior Queue에 포함시켜가며 가장 작은 weight를 가진 간선을 계속 선택, 모두 연결되면 종료
+//다익스트라 최단 경로 - 시작 노드에서 출발하여 나머지 노드로의 가중치를 갱신해가며 최소인 것을 선택
 typedef struct _Edge {
   int weight;
   int end_node_index;
@@ -20,6 +21,7 @@ typedef struct _GraphNode {
 
 typedef struct _Graph {
   GraphNode **node_list;
+  int size;
   void (*push_edge)(struct _Graph*, int, int, int);
   void (*push_node)(struct _Graph*, int);
 } Graph;
@@ -385,6 +387,7 @@ void push_edge_to_graph(Graph *graph, int start_node_index, int weight, int end_
 
 void push_node_to_graph(Graph *graph, int size){
   graph->node_list = (GraphNode **)malloc(sizeof(GraphNode*)*size);
+  graph->size = size;
   for(int i = 0; i < size; i++){
     GraphNode *gn = (GraphNode *)malloc(sizeof(GraphNode));
     init_graph_node(gn, i);
@@ -414,6 +417,17 @@ void init_queue(Queue *queue){
   queue->pop_all = queue_pop_all;
 }
 
+void graph_cleaner(Graph *graph){
+  GraphNode **node_list = graph->node_list;
+  int size = graph->size;
+  int cnt = 0;
+  while(cnt < size){
+    free(node_list[cnt]);
+    cnt++;
+  }
+  free(node_list);
+}
+
 void BFS(Graph *graph){
   int next_gn_index;
 
@@ -432,6 +446,7 @@ void BFS(Graph *graph){
       break;
     }
   }
+  graph_cleaner(graph);
   free(stack);
 }
 
@@ -453,6 +468,7 @@ void DFS(Graph *graph){
       break;
     }
   }
+  graph_cleaner(graph);
   free(queue);
 }
 
@@ -621,7 +637,14 @@ int main(int argc, char *argv[]){
   array[4] = 4;
   array[5] = 6;
   merge_sort(array, 0, 5);
-  print_array_all(array, 6);   
+  print_array_all(array, 6);  
+  
+  free(l_list);
+  free(stack);
+  free(queue);
+  free(prior_queue);
+  free(graph_for_bfs);
+  free(graph_for_dfs); 
   return 0;
 }
 
